@@ -4,8 +4,8 @@ import { AuthContext } from "../../AuthProvider/AuthProvider";
 
 const NavBar = () => {
     const links = <>
-        <li><Link>Home</Link></li>
-        <li><Link>All Foods</Link></li>
+        <li><Link to='/'>Home</Link></li>
+        <li><Link to='/allfoods'>All Foods</Link></li>
         <li><Link>Gallery</Link></li>
     </>
 
