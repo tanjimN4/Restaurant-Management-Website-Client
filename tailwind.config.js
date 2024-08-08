@@ -5,7 +5,10 @@ export default {
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: {fontFamily: {
+      greyQo: ['"Grey Qo"', 'sans-serif'],
+      poppins: ['Poppins', 'sans-serif'],
+    },},
   },
   plugins: [require('daisyui'),],
 }

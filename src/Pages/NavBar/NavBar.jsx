@@ -6,10 +6,10 @@ const NavBar = () => {
     const links = <>
         <li><Link to='/'>Home</Link></li>
         <li><Link to='/allfoods'>All Foods</Link></li>
-        <li><Link>Gallery</Link></li>
+        <li><Link to='/gallery'>Gallery</Link></li>
     </>
 
-    const {user,logOut}=useContext(AuthContext)
+    const { user, logOut } = useContext(AuthContext)
 
     const handleSignOut = () => {
         logOut()
@@ -53,18 +53,31 @@ const NavBar = () => {
             </div>
             <div className="navbar-end">
                 {
-                    user &&  <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">
-                    <div className="w-10 rounded-full">
+                    user &&
+                    <div className="dropdown dropdown-end">
+                    <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">
+                      <div className="w-10 rounded-full">
                         <img
-                            alt="Tailwind CSS Navbar component"
-                            src={user?.photoURL} />
+                          alt="Tailwind CSS Navbar component"
+                          src={user.photoURL}/>
+                      </div>
                     </div>
-                </div>
+                    <ul
+                      tabIndex={0}
+                      className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow">
+                      <li>
+                       
+                        <Link to='/myaddefdoodtems' className="justify-between">My added food items</Link>
+                      </li>
+                      <li><Link to='/addfood'>Add a food item</Link></li>
+                      <li><Link to='/myorderedfdoodtems'>My ordered food items</Link></li>
+                    </ul>
+                  </div>
                 }
-               {
-                user ? <button onClick={handleSignOut} className="btn">Sign Out</button>:
-                <a className="btn"><Link to='/login'>Login</Link></a>
-               }
+                {
+                    user ? <button onClick={handleSignOut} className="btn">Sign Out</button> :
+                        <Link className="btn" to='/login'>Login</Link>
+                }
             </div>
         </div>
     );

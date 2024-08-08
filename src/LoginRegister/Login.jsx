@@ -3,12 +3,27 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { AuthContext } from "../AuthProvider/AuthProvider";
 import { toast, ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
+import { FaGoogle } from "react-icons/fa";
+import { GoogleAuthProvider } from "firebase/auth";
+
 
 const Login = () => {
 
-    const { signIN } = useContext(AuthContext)
+    const { signIN,signInPop } = useContext(AuthContext)
     const location = useLocation();
     const navigate = useNavigate();
+
+    const handleGoogle = () => {
+        const provider = new GoogleAuthProvider();
+        signInPop(provider)
+        .then(result => {
+            toast.success('success')
+        })
+        .catch(error => {
+            console.error(error);
+            toast.error('error')
+        });
+    }
 
     const handleLogin = e => {
         e.preventDefault()
@@ -57,9 +72,11 @@ const Login = () => {
                         </div>
                         <div className="form-control mt-6">
                             <button className="btn btn-primary">Login</button>
+                            
                         </div>
                     </form>
-                    <p><p className="text-center mt-2 pb-2">Do not have a account<Link className="text-blue-600 font-bold" to='/register'>  Register</Link></p></p>
+                    <button onClick={handleGoogle} className="items-center text-center btn mt-5 mx-8"><FaGoogle /></button>
+                    <div><p className="text-center mt-2 pb-2">Do not have a account<Link className="text-blue-600 font-bold" to='/register'>  Register</Link></p></div>
                 </div>
             </div>
             <ToastContainer></ToastContainer>

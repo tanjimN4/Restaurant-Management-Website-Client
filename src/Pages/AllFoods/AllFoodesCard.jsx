@@ -1,7 +1,9 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 
 const AllFoodesCard = ({item}) => {
     const {_id, name, image, category, price, addedBy, email, origin, description } = item
+
     return (
         <div className="card bg-base-100 w-96 shadow-xl border-2">
             <figure className="px-10 pt-10">
