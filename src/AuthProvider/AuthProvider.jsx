@@ -1,14 +1,15 @@
 import { createContext, useEffect, useState } from "react";
 import app from "../../firebase.config";
 import { getAuth, createUserWithEmailAndPassword, onAuthStateChanged, signOut, signInWithEmailAndPassword, signInWithPopup } from "firebase/auth";
+import axios from "axios";
 
 const auth= getAuth(app)
 
-export const AuthContext =createContext(null)
+export const AuthContext =createContext()
 
 const AuthProvider = ({children}) => {
     
-    const [user,setUser]=useState()
+    const [user,setUser]=useState(null)
     const [loding,setLoding]=useState(true)
 
     const register =(email,password)=>{
@@ -17,7 +18,6 @@ const AuthProvider = ({children}) => {
     }
 
     const logOut=()=>{
-        setLoding(true)
         return signOut(auth)
     }
 
@@ -31,16 +31,38 @@ const AuthProvider = ({children}) => {
         return signInWithPopup(auth,provider)
     }
 
-    useEffect(()=>{
-        const unsubscribe =onAuthStateChanged(auth,currentUser=>{
-            setUser(currentUser)
-            setLoding(false)
-        })
-        return()=>{
-            unsubscribe()
-        }
-    },[])
-    const userData={register,user,logOut,signIN,signInPop}
+    useEffect(() => {
+		const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+			setUser(currentUser)
+            const userInfo = { email: currentUser?.email }
+
+			if (currentUser) {
+				
+
+				axios
+					.post('https://restaurant-management-website-server-nine.vercel.app/jwt', userInfo, {
+						withCredentials: true,
+					})
+					.then((res) => {
+						console.log('token respons', res.data)
+					})
+			} else {
+				axios
+					.post('https://restaurant-management-website-server-nine.vercel.app/logout', userInfo, {
+						withCredentials: true,
+					})
+					.then((res) => {
+						console.log(res.data)
+					})
+			}
+
+			setLoding(false)
+		})
+		return () => {
+			return unsubscribe()
+		}
+	}, [])
+    const userData={register,user,logOut,signIN,signInPop,loding}
 
     return (
         <AuthContext.Provider value={userData}>

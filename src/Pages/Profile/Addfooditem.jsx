@@ -20,14 +20,14 @@ const Addfooditem = () => {
         const category=form.category.value
         const origin=form.origin.value
         const description=form.description.value
-        const quantity=parseInt(form.quantity.value)
+        const quantity=form.quantity.value
         const addedBy=form.username.value
 
         const newAddFood={name,image,price,email,category,origin,description,quantity,addedBy}
 
         // console.log(newAddFood);
 
-        axios.post('http://localhost:5000/addfood', newAddFood)
+        axios.post('https://restaurant-management-website-server-nine.vercel.app/addfood', newAddFood)
         toast.success("Food item added successfully!");
             form.reset();
     }

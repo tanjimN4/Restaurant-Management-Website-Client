@@ -1,57 +1,76 @@
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../AuthProvider/AuthProvider";
-
-import { ItemContext } from "../../SingleItemGate/Single";
 import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
-
+import { useParams } from "react-router-dom";
 
 const Purchase = () => {
+    const [items, setItems] = useState([]);
+    const [item, setItem] = useState(null);
+    const [quantity, setQuantity] = useState(0);
+    const [isPurchaseAllowed, setIsPurchaseAllowed] = useState(true);
 
-    const {item}=useContext(ItemContext)
-    const {user}=useContext(AuthContext)
+    const { _id } = useParams();
+    const { user } = useContext(AuthContext);
     // console.log(item);
 
-    const [date,setdate]=useState()
-    // const [isAvailable, setIsAvailable] = useState(true)
+    useEffect(() => {
+        // Fetch items and set the specific item
+        fetch('https://restaurant-management-website-server-nine.vercel.app/itemsAll')
+            .then(res => res.json())
+            .then(data => {
+                const selectedItem = data.find(item => item._id === _id);
+                setItem(selectedItem);
+                setItems(data);
+                // Check purchase conditions
+                if (selectedItem) {
+                    setIsPurchaseAllowed(
+                        selectedItem.quantity > 0 &&
+                        user?.email !== selectedItem.email
+                    );
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching items:', error);
+                toast.error('Error fetching item details.');
+            });
+    }, [_id, user]);
 
-    useEffect(()=>{
-        const presantDate =new Date().toLocaleDateString()
-        setdate(presantDate)
-        // setIsAvailable( item.quantity> 0)
-    },[])
+    const handleQuantityChange = (e) => {
+        const newQuantity = parseInt(e.target.value);
+        setQuantity(newQuantity);
 
-    const handlePurchase =e=>{
-        e.preventDefault()
-
-        if(user.email===item.email){
-            toast.error('you cant buy your won food')
+        // Update purchase button state
+        if (item) {
+            setIsPurchaseAllowed(newQuantity > 0 && newQuantity <= item.quantity && user?.email !== item.email);
         }
+    };
 
-        // if (!isAvailable) {
-        //     toast.error('Item is not available for purchase.');
-        //     return;
-        // }
+    const handlePurchase = (e) => {
+        e.preventDefault();
 
-        
-        const form =e.target
-        const name = form.name.value
-        const email = form.email.value
-        const foodName = form.foodName.value
-        const price = form.price.value
-        const quantity = parseInt(form.quantity.value, 10);
-        const date = form.date.value
-        const image=item.image
-        const addedBy=item.addedBy
-
-        if (quantity > item.quantity) {
-            toast.error('Requested quantity exceeds available stock.');
+        if (!item || item.quantity === 0 || !isPurchaseAllowed) {
+            toast.error('Cannot purchase this item.');
             return;
         }
 
-        const store ={addedBy,name,image,email,foodName,price,quantity,date}
+        if (quantity > item.quantity) {
+            toast.error('Cannot purchase more than available quantity');
+            return;
+        }
 
-        axios.post(`http://localhost:5000/purchase/data`,store,{
+        const form = e.target;
+        const name = form.name.value;
+        const email = form.email.value;
+        const foodName = form.foodName.value;
+        const price = form.price.value;
+        const date = form.date.value;
+        const image = item.image;
+        const addedBy = item.addedBy;
+
+        const store = { addedBy, name, image, email, foodName, price, quantity, date };
+
+        axios.post('https://restaurant-management-website-server-nine.vercel.app/purchase/data', store, {
             headers: {
                 'Content-Type': 'application/json',
             },
@@ -59,6 +78,8 @@ const Purchase = () => {
         .then(response => {
             if (response.status === 200) {
                 toast.success('Purchase completed successfully!');
+                setQuantity(0);
+            form.reset();
             }
         })
         .catch(error => {
@@ -66,71 +87,100 @@ const Purchase = () => {
             toast.error('An error occurred. Please try again.');
         });
 
-        axios.put(`http://localhost:5000/itemsAllCount/${item._id}`, {
+        axios.put(`https://restaurant-management-website-server-nine.vercel.app/itemsAllCount/${item._id}`, {
             count: 1,
-            quantity:quantity
-          },{ withCredentials: true }, {
+            updateQuantity: item.quantity - quantity
+        }, { withCredentials: true }, {
             headers: {
-              'Content-Type': 'application/json',
+                'Content-Type': 'application/json',
             },
-          })
-    }
+        })
+        .then(response => {
+            if (response.status !== 200) {
+                toast.error('Error updating item quantity.');
+            }
+        })
+        .catch(error => {
+            console.error(error);
+            toast.error('An error occurred while updating item quantity.');
+        });
+        form.reset();
+    };
 
-    // console.log(user);
-    console.log(item);
     return (
         <div>
-            <form onSubmit={handlePurchase}  className="card-body">
-            <div className=" flex-none lg:flex gap-10 justify-center">
-                <div className="form-control">
-                    <label className="label">
-                        <span className="label-text">Food Name</span>
-                    </label>
-                    <input name="foodName" type="text" defaultValue={item.name} className="input input-bordered w-auto lg:w-96" required />
-                </div>
-                <div className="form-control">
-                    <label className="label">
-                        <span className="label-text">Price</span>
-                    </label>
-                    <input type="text" name="price" placeholder=" Price" defaultValue={item.price} className="input input-bordered w-auto lg:w-96" required />
-                </div>
-            </div>
-            <div className=" flex-none lg:flex gap-10 justify-center">
-                <div className="form-control">
-                    <label className="label">
-                        <span className="label-text">Buyer Name</span>
-                    </label>
-                    <input type="text" name="name" defaultValue={user.displayName} className="input input-bordered w-auto lg:w-96" required />
-                </div>
-                <div className="form-control">
-                    <label className="label">
-                        <span className="label-text">Buyer Email</span>
-                    </label>
-                    <input type="text" name="email" defaultValue={user.email} className="input input-bordered w-auto lg:w-96" required />
-                </div>
-            </div>
-            <div className=" flex-none lg:flex gap-10 justify-center">
-                <div className="form-control">
-                    <label className="label">
-                        <span className="label-text">Quantity</span>
-                    </label>
-                    <input type="number" name="quantity" placeholder="Quantity" className="input input-bordered w-auto lg:w-96" required />
-                </div>
-                <div className="form-control">
-                    <label className="label">
-                        <span className="label-text">Buying Date</span>
-                    </label>
-                    <input type="text" name="date" value={date} className="input input-bordered w-auto lg:w-96" required />
-                </div>
-            </div>
-            <div className=" flex justify-center mt-6">
-                <input className="btn w-auto lg:w-[900px] btn-primary" type="submit" value="purchase" />
-                
-            </div>
-        </form>
-        <ToastContainer></ToastContainer>
+            {item ? (
+                item.quantity === 0 ? (
+                    <p className="text-center text-red-500">This item is not available for purchase.</p>
+                ) : (
+                    <form onSubmit={handlePurchase} className="card-body">
+                        <div className="flex-none lg:flex gap-10 justify-center">
+                            <div className="form-control">
+                                <label className="label">
+                                    <span className="label-text">Food Name</span>
+                                </label>
+                                <input name="foodName" type="text" defaultValue={item.name} className="input input-bordered w-auto lg:w-96" required readOnly />
+                            </div>
+                            <div className="form-control">
+                                <label className="label">
+                                    <span className="label-text">Price</span>
+                                </label>
+                                <input type="text" name="price" placeholder="Price" defaultValue={item.price} className="input input-bordered w-auto lg:w-96" required readOnly />
+                            </div>
+                        </div>
+                        <div className="flex-none lg:flex gap-10 justify-center">
+                            <div className="form-control">
+                                <label className="label">
+                                    <span className="label-text">Buyer Name</span>
+                                </label>
+                                <input type="text" name="name" defaultValue={user?.displayName} className="input input-bordered w-auto lg:w-96" required />
+                            </div>
+                            <div className="form-control">
+                                <label className="label">
+                                    <span className="label-text">Buyer Email</span>
+                                </label>
+                                <input type="text" name="email" defaultValue={user?.email} className="input input-bordered w-auto lg:w-96" required />
+                            </div>
+                        </div>
+                        <div className="flex-none lg:flex gap-10 justify-center">
+                            <div className="form-control">
+                                <label className="label">
+                                    <span className="label-text">Quantity</span>
+                                </label>
+                                <input
+                                    type="number"
+                                    name="quantity"
+                                    placeholder="Quantity"
+                                    className="input input-bordered w-auto lg:w-96"
+                                    required
+                                    min="1"
+                                    max={item.quantity}
+                                    value={quantity}
+                                    onChange={handleQuantityChange}
+                                />
+                            </div>
+                            <div className="form-control">
+                                <label className="label">
+                                    <span className="label-text">Buying Date</span>
+                                </label>
+                                <input type="text" name="date" value={new Date().toLocaleDateString()} className="input input-bordered w-auto lg:w-96" readOnly />
+                            </div>
+                        </div>
+                        <div className="flex justify-center mt-6">
+                            <input
+                                className="btn w-auto lg:w-[900px] btn-primary"
+                                type="submit"
+                                value="Purchase"
+                                disabled={!isPurchaseAllowed || item.quantity === 0}
+                            />
+                        </div>
+                    </form>
+                )
+            ) : (
+                <p className="text-center">Loading...</p>
+            )}
+            <ToastContainer />
         </div>
-        
     );
 };
 

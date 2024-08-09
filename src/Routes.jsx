@@ -36,7 +36,7 @@ const router = createBrowserRouter([
             
         },
         {
-            path:'/purchase',
+            path:'/purchase/new/:_id',
             element:<Private><Purchase></Purchase></Private>,
             
         },

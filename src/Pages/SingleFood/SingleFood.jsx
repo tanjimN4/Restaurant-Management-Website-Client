@@ -1,19 +1,18 @@
-import { useContext, useEffect, useState } from "react";
+
+import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { ItemContext } from "../../SingleItemGate/Single";
+
 
 const SingleFood = () => {
     const [items, setItems] = useState([])
     const [loding, setLoding] = useState(true)
 
-    const {setItem} =useContext(ItemContext)
+    const { _id } = useParams()
 
-    const handlePurchase =e=>{
-        e.prventDefult
-        setItem(item)
-    }
+
+    const item = items.find(item => item._id === _id)
     useEffect(() => {
-        fetch('http://localhost:5000/itemsAll')
+        fetch('https://restaurant-management-website-server-nine.vercel.app/itemsAll')
             .then(res => res.json())
             .then(data => {
                 setItems(data)
@@ -22,10 +21,10 @@ const SingleFood = () => {
             )
     }, [])
 
-    const { _id } = useParams()
+    
 
     // console.log(items);
-    const item = items.find(item => item._id === _id)
+    
     // console.log(item);
 
     if (loding) {
@@ -48,7 +47,7 @@ const SingleFood = () => {
                     <p>Food Origin : {item.origin}</p>
                     <p>Food Description : {item.description}</p>
                     <div className="card-actions justify-end">
-                        <Link to='/purchase' onClick={handlePurchase}><button className="btn btn-primary">Purchase</button></Link>
+                        <Link to={`/purchase/new/${item._id}`}><button className="btn btn-primary">Purchase</button></Link>
                     </div>
                 </div>
             </div>
