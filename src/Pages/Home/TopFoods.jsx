@@ -9,7 +9,7 @@ const TopFoods = () => {
     const [items,setItems]=useState([])
 
     useEffect(()=>{
-        fetch('https://restaurant-management-website-server-nine.vercel.app/items')
+        fetch('https://restaurant-management-website-server-omega.vercel.app/items')
         .then(res=>res.json())
         .then(data=>setItems(data))
     },[])

@@ -8,7 +8,7 @@ const Gallery = () => {
     const [myFood, setMyFood] = useState([]);
     const modalRef = useRef(null);
 
-    const url = `https://restaurant-management-website-server-nine.vercel.app/gallery?email=${user.email}`;
+    const url = `https://restaurant-management-website-server-omega.vercel.app/gallery?email=${user.email}`;
 
     useEffect(() => {
         axios.get(url, { withCredentials: true })
@@ -31,7 +31,7 @@ const Gallery = () => {
             email: user.email
         };
 
-        axios.post('https://restaurant-management-website-server-nine.vercel.app/gallery/add', newFoodItem)
+        axios.post('https://restaurant-management-website-server-omega.vercel.app/gallery/add', newFoodItem)
             .then(res => {
                 setMyFood([...myFood, res.data]);
                 toast.success("Food item added successfully!");

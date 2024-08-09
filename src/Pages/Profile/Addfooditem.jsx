@@ -27,7 +27,7 @@ const Addfooditem = () => {
 
         // console.log(newAddFood);
 
-        axios.post('https://restaurant-management-website-server-nine.vercel.app/addfood', newAddFood)
+        axios.post('https://restaurant-management-website-server-omega.vercel.app/addfood', newAddFood)
         toast.success("Food item added successfully!");
             form.reset();
     }

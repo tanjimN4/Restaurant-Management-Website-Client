@@ -6,7 +6,7 @@ const AllFoods = () => {
     const [search, setSearch] = useState('')
 
     useEffect(() => {
-        fetch('https://restaurant-management-website-server-nine.vercel.app/itemsAll',{credentials: 'include'})
+        fetch('https://restaurant-management-website-server-omega.vercel.app/itemsAll',{credentials: 'include'})
             .then(res => res.json())
             .then(data => setItems(data))
     }, [])

@@ -40,7 +40,7 @@ const AuthProvider = ({children}) => {
 				
 
 				axios
-					.post('https://restaurant-management-website-server-nine.vercel.app/jwt', userInfo, {
+					.post('https://restaurant-management-website-server-omega.vercel.app/jwt', userInfo, {
 						withCredentials: true,
 					})
 					.then((res) => {
@@ -48,7 +48,7 @@ const AuthProvider = ({children}) => {
 					})
 			} else {
 				axios
-					.post('https://restaurant-management-website-server-nine.vercel.app/logout', userInfo, {
+					.post('https://restaurant-management-website-server-omega.vercel.app/logout', userInfo, {
 						withCredentials: true,
 					})
 					.then((res) => {
