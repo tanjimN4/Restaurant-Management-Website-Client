@@ -3,13 +3,25 @@ import { Link } from "react-router-dom";
 import { AuthContext } from "../../AuthProvider/AuthProvider";
 
 const NavBar = () => {
+    
+    const { user, logOut } = useContext(AuthContext)
+    let email, adminEmail, admin;
+
+    if (user) {
+        email = user.email;
+        adminEmail = 'admin@gmail.com';
+        admin = email === adminEmail;
+    }
     const links = <>
         <li><Link to='/'>Home</Link></li>
         <li><Link to='/allfoods'>All Foods</Link></li>
         <li><Link to='/gallery'>Gallery</Link></li>
+        {
+            admin && <li><Link to='/admin'>Admin</Link></li>
+        }
+
     </>
 
-    const { user, logOut } = useContext(AuthContext)
 
     const handleSignOut = () => {
         logOut()

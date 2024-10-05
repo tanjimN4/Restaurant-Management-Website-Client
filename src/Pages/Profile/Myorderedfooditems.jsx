@@ -11,7 +11,7 @@ const Myorderedfooditems = () => {
     const [myFood, setMyFood] = useState([])
     const [loding, setLoading] = useState(true)
 
-    const url = `https://restaurant-management-website-server-omega.vercel.app/purchase/data/email?email=${user.email}`
+    const url = `http://localhost:5000/purchase/data/email?email=${user.email}`
 
     useEffect(() => {
         axios.get(url, { withCredentials: true })
@@ -23,7 +23,7 @@ const Myorderedfooditems = () => {
 
 
     const handleDelete = (id) => {
-        axios.delete(`https://restaurant-management-website-server-omega.vercel.app/purchase/${id}`, { withCredentials: true })
+        axios.delete(`http://localhost:5000/purchase/${id}`, { withCredentials: true })
         .then(res=>{
             // console.log(res);
             

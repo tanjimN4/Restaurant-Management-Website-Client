@@ -15,6 +15,7 @@ import Update from "./Pages/DeleteAndUpdate/Update";
 import Addfooditem from "./Pages/Profile/Addfooditem";
 import Gallery from "./Pages/AllFoods/Gallery";
 import Myorderedfooditems from "./Pages/Profile/Myorderedfooditems";
+import Admin from "./Admin/Admin";
 
 const router = createBrowserRouter([
     {
@@ -68,6 +69,10 @@ const router = createBrowserRouter([
             path:'/addfood',
             element:<Addfooditem></Addfooditem>
         },
+        {
+            path:'admin',
+            element:<Admin></Admin>
+        }
       ]
     },
   ]);

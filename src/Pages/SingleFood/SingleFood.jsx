@@ -12,7 +12,7 @@ const SingleFood = () => {
 
     const item = items.find(item => item._id === _id)
     useEffect(() => {
-        fetch('https://restaurant-management-website-server-omega.vercel.app/itemsAll')
+        fetch('http://localhost:5000/itemsAll')
             .then(res => res.json())
             .then(data => {
                 setItems(data)

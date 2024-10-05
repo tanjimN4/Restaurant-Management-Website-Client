@@ -9,7 +9,7 @@ const MyAddedFoodItems = () => {
     const [selectedFood, setSelectedFood] = useState(null);
     const [modalOpen, setModalOpen] = useState(false);
 
-    const url = `https://restaurant-management-website-server-omega.vercel.app/itemsAll/email?email=${user.email}`;
+    const url = `http://localhost:5000/itemsAll/email?email=${user.email}`;
 
     useEffect(() => {
         axios.get(url, { withCredentials: true })
@@ -28,7 +28,7 @@ const MyAddedFoodItems = () => {
 
         const updatedFood = { name, description, price, category };
 
-        axios.put(`https://restaurant-management-website-server-omega.vercel.app/update/${selectedFood._id}`, updatedFood, { withCredentials: true })
+        axios.put(`http://localhost:5000/update/${selectedFood._id}`, updatedFood, { withCredentials: true })
             .then(() => {
                 setModalOpen(false);
                 setMyFood(prevFood => prevFood.map(food => food._id === selectedFood._id ? { ...food, ...updatedFood } : food));

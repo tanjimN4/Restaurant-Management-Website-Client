@@ -16,7 +16,7 @@ const Purchase = () => {
 
     useEffect(() => {
         // Fetch items and set the specific item
-        fetch('https://restaurant-management-website-server-omega.vercel.app/itemsAll')
+        fetch('http://localhost:5000/itemsAll')
             .then(res => res.json())
             .then(data => {
                 const selectedItem = data.find(item => item._id === _id);
@@ -70,7 +70,7 @@ const Purchase = () => {
 
         const store = { addedBy, name, image, email, foodName, price, quantity, date };
 
-        axios.post('https://restaurant-management-website-server-omega.vercel.app/purchase/data', store, {
+        axios.post('http://localhost:5000/purchase/data', store, {
             headers: {
                 'Content-Type': 'application/json',
             },
@@ -87,7 +87,7 @@ const Purchase = () => {
             toast.error('An error occurred. Please try again.');
         });
 
-        axios.put(`https://restaurant-management-website-server-omega.vercel.app/itemsAllCount/${item._id}`, {
+        axios.put(`http://localhost:5000/itemsAllCount/${item._id}`, {
             count: 1,
             updateQuantity: item.quantity - quantity
         }, { withCredentials: true }, {
@@ -111,7 +111,7 @@ const Purchase = () => {
         <div>
             {item ? (
                 item.quantity === 0 ? (
-                    <p className="text-center text-red-500 mx-10 bg-gray-400">This item is not available for purchase.</p>
+                   <div className="rounded-xl "> <p className="text-center rounded-xl text-red-500 my-10 h-80  bg-gray-400 text-4xl pt-20 font-semibold">This item is not available for purchase.</p></div>
                 ) : (
                     <form onSubmit={handlePurchase} className="card-body">
                         <div className="flex-none lg:flex gap-10 justify-center">
