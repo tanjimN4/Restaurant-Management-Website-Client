@@ -1,8 +1,10 @@
-# React + Vite
+Manage Users with Firebase Authentication
+In this, we will learn how to manage users with Firebase Authentication. Firebase Authentication is a service
+that provides backend services, easy-to-use SDKs, and ready-made UI libraries to authenticate users to  your app.
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Features
+--------
+Retrieve users data from Firebase Authentication
 
-Currently, two official plugins are available:
+Delete user accounts
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh

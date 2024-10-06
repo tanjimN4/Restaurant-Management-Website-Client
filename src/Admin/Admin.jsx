@@ -8,10 +8,10 @@ const Admin = () => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        if (user && user.email === 'tanjimahemed7@gmail.com') {
+        if (user && user.email === 'admin@gmail.com') {
             const fetchUsers = async () => {
                 try {
-                    const response = await fetch('http://localhost:5000/api/users');
+                    const response = await fetch('https://restaurant-management-website-server-omega.vercel.app/api/users');
                     if (!response.ok) {
                         throw new Error('Network response was not ok');
                     }
@@ -44,7 +44,7 @@ const Admin = () => {
 
         if (result.isConfirmed) {
             try {
-                const response = await fetch(`http://localhost:5000/api/users/${uid}`, {
+                const response = await fetch(`https://restaurant-management-website-server-omega.vercel.app/api/users/${uid}`, {
                     method: 'DELETE',
                 });
                 if (!response.ok) {

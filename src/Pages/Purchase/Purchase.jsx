@@ -16,7 +16,7 @@ const Purchase = () => {
 
     useEffect(() => {
         // Fetch items and set the specific item
-        fetch('http://localhost:5000/itemsAll')
+        fetch('https://restaurant-management-website-server-omega.vercel.app/itemsAll')
             .then(res => res.json())
             .then(data => {
                 const selectedItem = data.find(item => item._id === _id);
@@ -70,7 +70,7 @@ const Purchase = () => {
 
         const store = { addedBy, name, image, email, foodName, price, quantity, date };
 
-        axios.post('http://localhost:5000/purchase/data', store, {
+        axios.post('https://restaurant-management-website-server-omega.vercel.app/purchase/data', store, {
             headers: {
                 'Content-Type': 'application/json',
             },
@@ -87,7 +87,7 @@ const Purchase = () => {
             toast.error('An error occurred. Please try again.');
         });
 
-        axios.put(`http://localhost:5000/itemsAllCount/${item._id}`, {
+        axios.put(`https://restaurant-management-website-server-omega.vercel.app/itemsAllCount/${item._id}`, {
             count: 1,
             updateQuantity: item.quantity - quantity
         }, { withCredentials: true }, {
